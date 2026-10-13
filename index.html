@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<style>html{color-scheme:light}body{margin:0;font-size:14px;font-family:system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Suggested Platform vs RecruitOS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: one reading column. Headline, capability scorecard, engine room side by side, live cost calculator, payment plan, add-ons, checklist. */
+:root {
+  --bg: #f7f5fa;
+  --surface: #ffffff;
+  --fg: #1d1626;
+  --muted: #6a6275;
+  --line: #e4dfeb;
+  --sug: #6b09af;          /* accent */
+  --sug-soft: #f1e8f9;
+  --other: #8c8696;        /* RecruitOS, kept quiet */
+  --other-soft: #efedf2;
+  --yes: #6b09af;
+  --part: #b7791f;
+  --no: #b9b3c2;
+  --total-bg: #6b09af;
+  --total-fg: #ffffff;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141019; --surface: #1d1724; --fg: #f1ecf6; --muted: #a79fb2; --line: #322a3c;
+    --sug: #c08af0; --sug-soft: #2c1d3d; --other: #8f879b; --other-soft: #26202d;
+    --yes: #c08af0; --part: #e0a54a; --no: #5a5265; --total-bg: #4d0a7e; --total-fg: #ffffff; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141019; --surface: #1d1724; --fg: #f1ecf6; --muted: #a79fb2; --line: #322a3c;
+  --sug: #c08af0; --sug-soft: #2c1d3d; --other: #8f879b; --other-soft: #26202d;
+  --yes: #c08af0; --part: #e0a54a; --no: #5a5265; --total-bg: #4d0a7e; --total-fg: #ffffff; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.55; }
+.wrap { max-width: 980px; margin: 0 auto; padding-inline: 20px; padding-block: 48px 64px; display: grid; gap: 56px; }
+.wrap > * { min-width: 0; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+p { margin: 0; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+/* Hero */
+.hero { display: grid; gap: 16px; }
+.hero h1 { font-size: clamp(34px, 5.4vw, 56px); font-weight: 800; line-height: 1.02; }
+.hero h1 .sug { color: var(--sug); }
+.hero h1 .vs { font-weight: 500; color: var(--muted); font-size: 0.55em; vertical-align: 0.25em; margin-inline: 0.2em; }
+.hero h1 .other { color: var(--other); font-weight: 700; }
+.lede { font-size: 19px; max-width: 60ch; color: var(--fg); }
+
+/* Scoreboard */
+.section-head { display: grid; gap: 6px; margin-bottom: 20px; }
+.section-head h2 { font-size: 28px; font-weight: 700; }
+.section-head p { color: var(--muted); max-width: 62ch; }
+.board { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.pair { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; display: grid; gap: 10px; align-content: start; }
+.pair .label { font-size: 14px; color: var(--muted); min-height: 2.6em; }
+.pair .big { font-family: var(--display); font-weight: 800; font-size: 40px; line-height: 1; color: var(--sug); font-variant-numeric: tabular-nums; }
+.pair .small { display: flex; align-items: baseline; gap: 8px; padding-top: 10px; border-top: 1px dashed var(--line); color: var(--other); font-size: 14px; }
+.pair .small b { font-family: var(--display); font-size: 20px; font-variant-numeric: tabular-nums; }
+.who { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
+.who.r { color: var(--sug); }
+
+/* Scorecard table */
+.legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: 14px; color: var(--muted); margin-bottom: 12px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.table-box { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+table { width: 100%; border-collapse: collapse; min-width: 640px; }
+th, td { text-align: left; vertical-align: top; padding: 12px 16px; border-bottom: 1px solid var(--line); font-size: 15px; }
+thead th { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 500; color: var(--muted); background: var(--bg); }
+thead th.r { color: var(--sug); }
+tbody tr:last-child td { border-bottom: 0; }
+tr.group td { background: var(--sug-soft); font-family: var(--display); font-weight: 700; font-size: 15px; padding-block: 8px; color: var(--fg); }
+td.cap { width: 38%; font-weight: 500; }
+td.cell { width: 31%; }
+.cellin { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 8px; align-items: start; }
+.cellin small { color: var(--muted); font-size: 14px; line-height: 1.4; display: block; }
+.mark { width: 14px; height: 14px; border-radius: 50%; margin-top: 4px; flex: none; }
+.mark.yes { background: var(--yes); }
+.mark.part { background: linear-gradient(90deg, var(--part) 50%, transparent 50%); border: 2px solid var(--part); }
+.mark.no { border: 2px solid var(--no); }
+
+/* Engine room */
+.engine { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.stack { border-radius: 10px; padding: 22px; display: grid; gap: 14px; align-content: start; border: 1px solid var(--line); }
+.stack.r { background: var(--surface); border-color: var(--sug); box-shadow: 0 0 0 3px var(--sug-soft); }
+.stack.o { background: var(--other-soft); }
+.stack h3 { font-size: 22px; font-weight: 700; }
+.stack.r h3 { color: var(--sug); }
+.stack.o h3 { color: var(--other); }
+.stack dl { margin: 0; display: grid; gap: 12px; }
+.stack dt { font-weight: 600; }
+.stack dd { margin: 0; color: var(--muted); font-size: 15px; }
+.stack dd .tech { font-family: var(--mono); font-size: 12px; color: var(--fg); opacity: 0.75; display: block; margin-top: 2px; }
+.stack.o dt { color: var(--muted); }
+
+
+/* Running cost */
+.cost { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 16px; align-items: start; }
+.total { background: var(--total-bg); color: var(--total-fg); border-radius: 10px; padding: 24px; display: grid; gap: 8px; }
+.total .num { font-family: var(--display); font-weight: 800; font-size: 56px; line-height: 1; font-variant-numeric: tabular-nums; }
+.total .num small { font-size: 20px; font-weight: 500; opacity: 0.85; }
+.total p { font-size: 15px; opacity: 0.92; }
+.total ul { margin: 6px 0 0; padding-left: 18px; display: grid; gap: 4px; font-size: 15px; }
+.lines { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.line { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; padding: 11px 16px; border-bottom: 1px solid var(--line); font-size: 15px; }
+.line:last-child { border-bottom: 0; }
+.line .what small { display: block; color: var(--muted); font-size: 13px; }
+.line .amt { font-variant-numeric: tabular-nums; font-weight: 600; text-align: right; white-space: nowrap; }
+.line .amt em { display: block; font-style: normal; font-weight: 400; font-size: 12px; color: var(--part); }
+.line.sum { background: var(--sug-soft); font-weight: 700; }
+
+
+/* Cost slider */
+.vol { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-top: 10px; font-size: 15px; }
+.vol output { font-family: var(--display); font-weight: 700; font-size: 22px; font-variant-numeric: tabular-nums; }
+#volume { width: 100%; accent-color: var(--total-fg); cursor: pointer; }
+#volume:focus-visible { outline: 2px solid var(--total-fg); outline-offset: 4px; }
+.scale { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; opacity: 0.75; }
+.total .hint { font-size: 13px; opacity: 0.85; }
+.line.group-head { background: var(--bg); font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding-block: 8px; }
+.line.group-head .amt { color: var(--fg); font-family: var(--display); font-size: 15px; letter-spacing: 0; }
+.note { font-size: 13px; color: var(--muted); padding: 12px 16px; margin: 0; border-top: 1px solid var(--line); }
+
+/* Payment plan */
+.deal { display: grid; gap: 16px; }
+.deal-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.deal-facts > div { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; }
+.k { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.v { font-family: var(--display); font-weight: 800; font-size: 36px; color: var(--sug); line-height: 1.1; font-variant-numeric: tabular-nums; }
+.milestones { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 2fr 3fr 5fr; gap: 8px; }
+.milestones li { background: var(--sug-soft); border-radius: 10px; padding: 16px; display: grid; gap: 2px; align-content: start; min-width: 0; }
+.milestones li:last-child { background: var(--total-bg); color: var(--total-fg); }
+.pct { font-family: var(--display); font-weight: 800; font-size: 28px; line-height: 1; }
+.m-amt { font-weight: 600; font-variant-numeric: tabular-nums; }
+.m-when { font-size: 14px; opacity: 0.85; }
+.terms { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.term { border-top: 3px solid var(--sug); padding-top: 12px; display: grid; gap: 4px; align-content: start; }
+.term h3 { font-size: 18px; font-weight: 700; }
+.term p { color: var(--muted); font-size: 15px; }
+
+/* Capability sub-label */
+td.cap small { display: block; color: var(--muted); font-weight: 400; font-size: 14px; line-height: 1.4; }
+
+/* Add-ons */
+.addon { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.addon-main { padding: 24px; display: grid; gap: 10px; align-content: start; }
+.addon-main h3 { font-size: 24px; font-weight: 700; }
+.addon-main blockquote { margin: 4px 0; padding: 12px 16px; border-left: 3px solid var(--sug); background: var(--sug-soft); font-size: 16px; border-radius: 0 6px 6px 0; }
+.addon-main p:last-child { color: var(--muted); font-size: 15px; }
+.addon-side { padding: 24px; background: var(--sug-soft); display: grid; gap: 6px; align-content: start; }
+.addon-once { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.addon-side ul { margin: 8px 0 0; padding-left: 18px; display: grid; gap: 4px; font-size: 15px; }
+.addon-note { font-size: 13px; color: var(--muted); margin-top: 8px; }
+
+/* Needs checklist */
+.needs { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; }
+.needs li { display: grid; grid-template-columns: 22px minmax(0, 1fr); column-gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.needs li::before { content: ""; width: 16px; height: 16px; border: 2px solid var(--sug); border-radius: 4px; margin-top: 3px; grid-row: span 2; }
+.needs b { font-weight: 600; }
+.needs span { color: var(--muted); font-size: 15px; }
+
+/* Reasons */
+.reasons { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.reason { display: grid; gap: 8px; align-content: start; padding-top: 16px; border-top: 3px solid var(--sug); }
+.reason h3 { font-size: 20px; font-weight: 700; }
+.reason p { color: var(--muted); font-size: 15px; }
+
+footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; max-width: 75ch; }
+
+@media (max-width: 820px) {
+  .board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .engine, .reasons, .cost, .terms, .needs, .addon { grid-template-columns: minmax(0, 1fr); }
+  .milestones { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 440px) {
+  .board { grid-template-columns: minmax(0, 1fr); }
+  .pair .label { min-height: 0; }
+}
+</style>
+
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">Platform comparison · October 2026</p>
+    <h1><span class="sug">The suggested platform</span><span class="vs">vs</span><span class="other">RecruitOS</span></h1>
+  </header>
+
+  <section>
+    <div class="section-head">
+      <h2>What each one can do</h2>
+      <p>The everyday jobs of an agency, side by side.</p>
+    </div>
+    <div class="legend" aria-hidden="true">
+      <span><i class="mark yes"></i> Yes</span>
+      <span><i class="mark part"></i> Partly</span>
+      <span><i class="mark no"></i> No</span>
+    </div>
+    <div class="table-box">
+      <table>
+        <thead>
+          <tr><th scope="col">Capability</th><th scope="col" class="r">Suggested</th><th scope="col">RecruitOS</th></tr>
+        </thead>
+        <tbody>
+          <tr class="group"><td colspan="3">For candidates</td></tr>
+          <tr>
+            <td class="cap">Apply through a careers page</td>
+            <td class="cell"><div class="cellin"><i class="mark yes" aria-label="Yes"></i><span>Yes<small>Full application form with CV upload</small></span></div></td>
+            <td class="cell"><div class="cellin"><i class="mark part" aria-label="Partly"></i><span>Partly<small>Lists jobs; candidates cannot apply</small></span></div></td>
+          </tr>
+          <tr>
+            <td class="cap">Record a video screening in the browser</td>
+            <td class="cell"><div class="cellin"><i class="mark yes" aria-label="Yes"></i><span>Yes<small>Graded automatically by AI</small></span></div></td>
+            <td class="cell"><div class="cellin"><i class="mark no" aria-label="No"></i><span>No</span></div></td>
+          </tr>
+          <tr>
+            <td class="cap">Book or move their own interview</td>
+            <td class="cell"><div class="cellin"><i class="mark yes" aria-label="Yes"></i><span>Yes<small>Self-booking link with Google Meet</small></span></div></td>
+            <td class="cell"><div class="cellin"><i class="mark no" aria-label="No"></i><span>No</span></div></td>
+          </tr>
+          <tr>
+            <td class="cap">Complete exercises and agree pay online</td>
+            <td class="cell"><div class="cellin"><i class="mark yes" aria-label="Yes"></i><span>Yes<small>Sent at the right stage, no recruiter needed</small></span></div></td>
+            <td class="cell"><div class="cellin"><i class="mark no" aria-label="No"></i><span>No</span></div></td>
+          </tr>
+
+          <tr class="group"><td colspan="3">For recruiters</td></tr>
+          <tr>
+            <td class="cap">Emails go out automatically as candidates move stage</td>
+            <td class="cell"><div class="cellin"><i class="mark yes" aria-label="Yes"></i><span>Yes<small>With timed follow-ups and sequences</small></span></div></td>
+            <td class="cell"><div class="cellin"><i class="mark no" aria-label="No"></i><span>No<small>Email sending is not switched on</small></span></div></td>
+          </tr>
+          <tr>
+            <td class="cap">A full email inbox inside the platform</td>
+            <td class="cell"><div class="cellin"><i class="mark yes" aria-label="Yes"></i><span>Yes<small>Threads, drafts, attachments, AI-written replies</small></span></div></td>
+            <td class="cell"><div class="cellin"><i class="mark part" aria-label="Partly"></i><span>Partly<small>Built, not yet connected</small></span></div></td>
+          </tr>
+          <tr>
+            <td class="cap">AI reads CVs and fills the profile</td>
+            <td class="cell"><div class="cellin"><i class="mark yes" aria-label="Yes"></i><span>Yes<small>14,000+ CVs processed</small></span></div></td>
+            <td class="cell"><div class="cellin"><i class="mark yes" aria-label="Yes"></i><span>Yes</span></div></td>
+          </tr>
+          <tr>
+            <td class="cap">AI finds past candidates who fit a new role</td>
+            <td class="cell"><div class="cellin"><i class="mark yes" aria-label="Yes"></i><span>Yes<small>“Revive” searches the whole database</small></span></div></td>
+            <td class="cell"><div class="cellin"><i class="mark no" aria-label="No"></i><span>No</span></div></td>
+          </tr>
+          <tr>
+            <td class="cap">LinkedIn sourcing and outreach tracking</td>
+            <td class="cell"><div class="cellin"><i class="mark yes" aria-label="Yes"></i><span>Yes<small>Browser extension, prospect lists, LinkedIn, WhatsApp and email tracking</small></span></div></td>
+            <td class="cell"><div class="cellin"><i class="mark part" aria-label="Partly"></i><span>Partly<small>Extension saves a profile</small></span></div></td>
+          </tr>
+          <tr>
+            <td class="cap">Team alerts in Slack</td>
+            <td class="cell"><div class="cellin"><i class="mark yes" aria-label="Yes"></i><span>Yes<small>Per role, per stage</small></span></div></td>
+            <td class="cell"><div class="cellin"><i class="mark no" aria-label="No"></i><span>No</span></div></td>
+          </tr>
+          <tr>
+            <td class="cap">Full API<small>Connect your other tools to the platform</small></td>
+            <td class="cell"><div class="cellin"><i class="mark yes" aria-label="Yes"></i><span>Yes<small>109 endpoints, with secure access keys</small></span></div></td>
+            <td class="cell"><div class="cellin"><i class="mark no" aria-label="No"></i><span>No<small>Internal only, serves its own screens</small></span></div></td>
+          </tr>
+          <tr>
+            <td class="cap">MCP server for Claude<small>Run your recruiting by talking to Claude</small></td>
+            <td class="cell"><div class="cellin"><i class="mark yes" aria-label="Yes"></i><span>Yes, add-on<small>18 tools that search, update and email from inside Claude</small></span></div></td>
+            <td class="cell"><div class="cellin"><i class="mark no" aria-label="No"></i><span>No</span></div></td>
+          </tr>
+
+          <tr class="group"><td colspan="3">For clients and the business</td></tr>
+          <tr>
+            <td class="cap">Clients review candidates online</td>
+            <td class="cell"><div class="cellin"><i class="mark yes" aria-label="Yes"></i><span>Yes<small>Approve or decline at each stage, watch recordings</small></span></div></td>
+            <td class="cell"><div class="cellin"><i class="mark yes" aria-label="Yes"></i><span>Yes<small>View a shortlist and leave feedback</small></span></div></td>
+          </tr>
+          <tr>
+            <td class="cap">Reports on where candidates drop off</td>
+            <td class="cell"><div class="cellin"><i class="mark yes" aria-label="Yes"></i><span>Yes<small>Pipeline, application and outreach funnels</small></span></div></td>
+            <td class="cell"><div class="cellin"><i class="mark part" aria-label="Partly"></i><span>Partly<small>Dashboard and revenue forecast</small></span></div></td>
+          </tr>
+          <tr>
+            <td class="cap">Payouts and invoices</td>
+            <td class="cell"><div class="cellin"><i class="mark yes" aria-label="Yes"></i><span>Yes<small>Two-person approval before money moves</small></span></div></td>
+            <td class="cell"><div class="cellin"><i class="mark part" aria-label="Partly"></i><span>Partly<small>Tracks placements and fees</small></span></div></td>
+          </tr>
+          <tr>
+            <td class="cap">Different access for different roles</td>
+            <td class="cell"><div class="cellin"><i class="mark yes" aria-label="Yes"></i><span>Yes<small>6 roles, each permission set separately</small></span></div></td>
+            <td class="cell"><div class="cellin"><i class="mark part" aria-label="Partly"></i><span>Partly<small>Everyone sees everything; admin manages accounts</small></span></div></td>
+          </tr>
+          <tr>
+            <td class="cap">Ready to serve more than one agency</td>
+            <td class="cell"><div class="cellin"><i class="mark yes" aria-label="Yes"></i><span>Yes<small>Each agency's data kept fully separate</small></span></div></td>
+            <td class="cell"><div class="cellin"><i class="mark no" aria-label="No"></i><span>No<small>One agency by design</small></span></div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>The engine room</h2>
+      <p>What each platform is built from, in plain words.</p>
+    </div>
+    <div class="engine">
+      <div class="stack r">
+        <h3>Suggested platform</h3>
+        <dl>
+          <div><dt>Screens</dt><dd>A fast web app on a global hosting network<span class="tech">Next.js 15 · Vercel</span></dd></div>
+          <div><dt>The engine</dt><dd>A separate server that handles the business logic and can scale on its own<span class="tech">NestJS · Railway</span></dd></div>
+          <div><dt>Background workers</dt><dd>15 helpers that send emails, grade videos and remind people, day and night<span class="tech">BullMQ · Redis</span></dd></div>
+          <div><dt>Data and files</dt><dd>An industry-standard database, plus dedicated storage for CVs and videos<span class="tech">Supabase Postgres · Cloudflare R2</span></dd></div>
+          <div><dt>AI</dt><dd>Anthropic's latest Claude models for CVs, video grading, matching and replies<span class="tech">Claude 5.5</span></dd></div>
+          <div><dt>API and MCP</dt><dd>A full API for connecting other tools, and an MCP server so Claude can work inside the platform<span class="tech">REST API · MCP server</span></dd></div>
+          <div><dt>Watching over it</dt><dd>18 automatic health checks every morning, plus error alerts<span class="tech">Health digest · Sentry</span></dd></div>
+        </dl>
+      </div>
+      <div class="stack o">
+        <h3>RecruitOS</h3>
+        <dl>
+          <div><dt>Screens and engine</dt><dd>Both packed into one small server<span class="tech">React · Python FastAPI · Render</span></dd></div>
+          <div><dt>Wake-up time</dt><dd>The server sleeps when idle, so the first visit of the day takes about 35 seconds</dd></div>
+          <div><dt>Background workers</dt><dd>Six are planned, but its own notes say only one service has been switched on</dd></div>
+          <div><dt>Data and files</dt><dd>Supabase database and storage<span class="tech">Supabase Postgres</span></dd></div>
+          <div><dt>AI</dt><dd>Reads CVs only<span class="tech">Gemini or Claude</span></dd></div>
+          <div><dt>API and MCP</dt><dd>Neither. Other tools cannot connect to it</dd></div>
+          <div><dt>Backups</dt><dd>Its own notes say the nightly backup has never been switched on</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>What it costs to run</h2>
+      <p>The monthly bill for hosting and services, paid directly to each provider. Part of it is fixed; the rest moves with how many candidates come in.</p>
+    </div>
+    <div class="cost">
+      <div class="total">
+        <p class="eyebrow" style="color:inherit;opacity:.8">Estimated per month</p>
+        <p class="num"><span id="total-amt">$116</span><small> /month</small></p>
+        <label class="vol" for="volume">
+          <span>New candidates a month</span>
+          <output id="vol-out" for="volume">500</output>
+        </label>
+        <input type="range" id="volume" min="250" max="10000" step="250" value="500" aria-describedby="vol-hint">
+        <div class="scale" aria-hidden="true"><span>250</span><span>5,000</span><span>10,000</span></div>
+        <p id="vol-hint" class="hint">Drag to match your hiring volume. Only the three lines marked &ldquo;varies&rdquo; change.</p>
+      </div>
+      <div class="lines">
+        <div class="line group-head"><div class="what">Fixed every month</div><div class="amt">$100</div></div>
+        <div class="line"><div class="what">Database<small>All candidate, job and client records (Supabase Pro)</small></div><div class="amt">$35</div></div>
+        <div class="line"><div class="what">Website hosting<small>The screens everyone uses (Vercel Pro)</small></div><div class="amt">$20</div></div>
+        <div class="line"><div class="what">Email sending<small>Automatic and bulk email (Resend Pro)</small></div><div class="amt">$20</div></div>
+        <div class="line"><div class="what">Server and workers<small>The engine and the background helpers (Railway)</small></div><div class="amt">$10</div></div>
+        <div class="line"><div class="what">Task queue<small>Keeps the background helpers in order (Upstash Redis)</small></div><div class="amt">$10</div></div>
+        <div class="line"><div class="what">File and video storage<small>CVs and screening recordings (Cloudflare R2)</small></div><div class="amt">$5</div></div>
+        <div class="line"><div class="what">Error alerts<small>Tells us when something breaks (Sentry, free plan)</small></div><div class="amt">$0</div></div>
+        <div class="line group-head"><div class="what">Varies with volume</div><div class="amt" id="var-amt">$16</div></div>
+        <div class="line"><div class="what">AI<small>Reading CVs, grading videos, finding matches, drafting replies (Anthropic Claude)</small></div><div class="amt"><span id="amt-ai">$12</span><em>varies</em></div></div>
+        <div class="line"><div class="what">Video transcription<small>Turns screening videos into text for grading (AssemblyAI)</small></div><div class="amt"><span id="amt-tx">$3</span><em>varies</em></div></div>
+        <div class="line"><div class="what">File conversion<small>Turns Word CVs into PDFs (CloudConvert)</small></div><div class="amt"><span id="amt-cv">$1</span><em>varies</em></div></div>
+        <p class="note">Fixed lines are each provider's list price. Variable lines use the real cost per new candidate on the live system, about 3&cent; each.</p>
+      </div>
+    </div>
+  </section>
+
+
+
+  <section>
+    <div class="section-head">
+      <h2>Payment plan</h2>
+      <p>One fixed price for the build, paid in three steps.</p>
+    </div>
+    <div class="deal">
+      <div class="deal-facts">
+        <div><p class="k">Build time</p><p class="v">4&ndash;5 weeks</p></div>
+        <div><p class="k">Total price</p><p class="v">$7,500</p></div>
+      </div>
+      <ol class="milestones">
+        <li><span class="pct">20%</span><span class="m-amt">$1,500</span><span class="m-when">Upfront, to start the build</span></li>
+        <li><span class="pct">30%</span><span class="m-amt">$2,250</span><span class="m-when">Midway, after the progress review</span></li>
+        <li><span class="pct">50%</span><span class="m-amt">$3,750</span><span class="m-when">On delivery</span></li>
+      </ol>
+      <div class="terms">
+        <div class="term"><h3>1 month guarantee</h3><p>Any bugs or fixes in the first month after delivery are covered at no extra cost.</p></div>
+        <div class="term"><h3>$100 an hour after that</h3><p>New features or changes after the guarantee are billed hourly.</p></div>
+        <div class="term"><h3>Running costs are yours</h3><p>Hosting and services are billed to your own accounts, so you own the platform and its data from day one.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Add-ons</h2>
+      <p>Optional, and can be added at any time.</p>
+    </div>
+    <div class="addon">
+      <div class="addon-main">
+        <p class="k">MCP server for Claude</p>
+        <h3>Run your recruiting by talking to Claude</h3>
+        <blockquote>&ldquo;Show me everyone in Final Interview for the Data Lead role, and move Sara to Offer.&rdquo;</blockquote>
+        <p>Claude finds the candidates, makes the change and logs it, using the same 18 tools whether you ask on desktop or phone.</p>
+      </div>
+      <div class="addon-side">
+        <p class="v">$1,500</p>
+        <p class="addon-once">One-time setup</p>
+        <ul>
+          <li>Set up on its own secure server</li>
+          <li>Each tool limited to that person's permissions</li>
+          <li>Connected to every user's Claude</li>
+          <li>One training session for the team</li>
+        </ul>
+        <p class="addon-note">Adds about $5 a month in hosting. Each user needs a paid Claude plan.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>What we need from you</h2>
+      <p>Having these ready on day one keeps the build on schedule.</p>
+    </div>
+    <ul class="needs">
+      <li><b>Access to the accounts you already have</b><span>Supabase or any other platform you use today, with admin rights.</span></li>
+      <li><b>Google Workspace admin access</b><span>For sign-in with Google, Gmail and Calendar.</span></li>
+      <li><b>Slack workspace admin access</b><span>For team alerts.</span></li>
+      <li><b>Domain admin access</b><span>GoDaddy or whichever provider you use. Needed for the web address and so emails land in inboxes, not spam.</span></li>
+      <li><b>A virtual credit card</b><span>To open the remaining services in your name without waiting on approvals.</span></li>
+      <li><b>An export of your current data</b><span>Candidates, CVs, jobs and clients from RecruitOS, so nothing is lost in the move.</span></li>
+      <li><b>Your logo, colours and a view on the design</b><span>We will use the platform's current design if you like it, with your branding on top, or adjust it with you.</span></li>
+      <li><b>Your team list and roles</b><span>Who should see and do what.</span></li>
+      <li><b>Your hiring stages and email wording</b><span>Or we start from proven defaults and adjust together.</span></li>
+      <li><b>One decision-maker</b><span>Someone who can answer questions within two working days.</span></li>
+    </ul>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  // USD per new candidate on the live system, September 2026 (AI, transcription, file conversion)
+  var RATES = { ai: 0.0248, tx: 0.0062, cv: 0.0005 };
+  var FIXED = 100;
+  var el = function (id) { return document.getElementById(id); };
+  var money = function (n) { return '$' + n.toLocaleString('en-US'); };
+  var slider = el('volume');
+  function update() {
+    var n = Number(slider.value);
+    var ai = Math.max(1, Math.round(n * RATES.ai));
+    var tx = Math.max(1, Math.round(n * RATES.tx));
+    var cv = Math.max(1, Math.round(n * RATES.cv));
+    var v = ai + tx + cv;
+    el('vol-out').textContent = n.toLocaleString('en-US');
+    el('amt-ai').textContent = money(ai);
+    el('amt-tx').textContent = money(tx);
+    el('amt-cv').textContent = money(cv);
+    el('var-amt').textContent = money(v);
+    el('total-amt').textContent = money(FIXED + v);
+  }
+  slider.addEventListener('input', update);
+  update();
+})();
+</script>
+
+</body>
+
+</html>
